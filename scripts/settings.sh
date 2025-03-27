@@ -65,7 +65,7 @@ LINUX_VERSION=6.6.10-xilinx-v2024.1
 
 
 # UBUNTU_20_4_BASE_ROOTFS_URL=http://cdimage.ubuntu.com/ubuntu-base/releases/20.04/release/ubuntu-base-20.04.1-base-arm64.tar.gz
-UBUNTU_20_4_BASE_ROOTFS_URL=http://cdimage.ubuntu.com/ubuntu-base/releases/22.04/release/ubuntu-base-22.04-base-arm64.tar.gz
+UBUNTU_20_4_BASE_ROOTFS_URL=https://cdimage.ubuntu.com/ubuntu-base/releases/22.04.5/release/ubuntu-base-22.04.5-base-arm64.tar.gz
 QEMU_STAGE_1_SCRIPT=qemu_stage_1.sh
 UBUNTU_STAGE_1_PACKAGES_FILE=stage_1_packages.txt
 QEMU_STAGE_2_SCRIPT=qemu_stage_2.sh
