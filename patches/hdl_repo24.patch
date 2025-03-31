@@ -1,15 +1,15 @@
-From baf05463bf80dd227442125bdb09832dd472f0ef Mon Sep 17 00:00:00 2001
+From 6121f669bee91639148764d6ad5a44fcf8d6dbb0 Mon Sep 17 00:00:00 2001
 From: Oluwatobi Ed Adetula olade <olade@sdu-125892.c.sdu.dk>
-Date: Mon, 31 Mar 2025 19:38:34 +0000
+Date: Mon, 31 Mar 2025 19:46:39 +0000
 Subject: [PATCH] update tcl with mp4d
 
 ---
  boards/u96v2_sbc/mp4d/u96v2_sbc_mp4d.tcl   | 121 ++++++++++++
  scripts/bin_helper.tcl                     |  50 ++---
- scripts/make.tcl                           |  37 ++++
+ scripts/make.tcl                           |  39 +++-
  scripts/make_u96v2_sbc_mp4d.tcl            |  60 ++++++
  scripts/project_scripts/u96v2_sbc_mp4d.tcl | 212 +++++++++++++++++++++
- 5 files changed, 455 insertions(+), 25 deletions(-)
+ 5 files changed, 456 insertions(+), 26 deletions(-)
  create mode 100644 boards/u96v2_sbc/mp4d/u96v2_sbc_mp4d.tcl
  create mode 100644 scripts/make_u96v2_sbc_mp4d.tcl
  create mode 100644 scripts/project_scripts/u96v2_sbc_mp4d.tcl
@@ -201,7 +201,7 @@ index f07795b..4c88d8a 100644
 +   after 1000
  }
 diff --git a/scripts/make.tcl b/scripts/make.tcl
-index 1ab5773..f50b8b5 100755
+index 1ab5773..aab96ad 100755
 --- a/scripts/make.tcl
 +++ b/scripts/make.tcl
 @@ -153,6 +153,8 @@ for {set i 0} {$i < [llength $argv]} {incr i} {
@@ -262,6 +262,15 @@ index 1ab5773..f50b8b5 100755
  #version check
  set version [version -short]
  if {[string match -nocase "yes" $version_override]} {
+@@ -403,7 +440,7 @@ switch -nocase $board {
+                                  puts " Boards are defined in [file normalize [pwd]/../boards]"
+                                  return -code ok}
+ }
+-if {[string match -nocase "no" $jtag]} {
++if {[string match -nocase "no" $jtag] && $task=="build"} {
+    puts "\n\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+    puts " Generating Binary..."
+    puts "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n"
 diff --git a/scripts/make_u96v2_sbc_mp4d.tcl b/scripts/make_u96v2_sbc_mp4d.tcl
 new file mode 100644
 index 0000000..6274667
