@@ -1,14 +1,15 @@
-From ef0eab848946fb703b025fa87349474722f7af2e Mon Sep 17 00:00:00 2001
+From 374eeb5938824eee646c6771b75aa837cd07b04f Mon Sep 17 00:00:00 2001
 From: Oluwatobi Ed Adetula olade <olade@sdu-125892.c.sdu.dk>
-Date: Mon, 31 Mar 2025 18:44:16 +0000
+Date: Mon, 31 Mar 2025 19:08:36 +0000
 Subject: [PATCH] update tcl with mp4d
 
 ---
  boards/u96v2_sbc/mp4d/u96v2_sbc_mp4d.tcl   | 121 ++++++++++++
+ scripts/bin_helper.tcl                     |  50 ++---
  scripts/make.tcl                           |  37 ++++
  scripts/make_u96v2_sbc_mp4d.tcl            |  60 ++++++
  scripts/project_scripts/u96v2_sbc_mp4d.tcl | 212 +++++++++++++++++++++
- 4 files changed, 430 insertions(+)
+ 5 files changed, 455 insertions(+), 25 deletions(-)
  create mode 100644 boards/u96v2_sbc/mp4d/u96v2_sbc_mp4d.tcl
  create mode 100644 scripts/make_u96v2_sbc_mp4d.tcl
  create mode 100644 scripts/project_scripts/u96v2_sbc_mp4d.tcl
@@ -140,6 +141,65 @@ index 0000000..0a8cfdb
 +
 +}
 +
+diff --git a/scripts/bin_helper.tcl b/scripts/bin_helper.tcl
+index f07795b..4c88d8a 100644
+--- a/scripts/bin_helper.tcl
++++ b/scripts/bin_helper.tcl
+@@ -107,29 +107,29 @@ while {1} {
+       puts "Found End of Bitstream Creation..."
+       break 
+    }
+-#   # paint pretty picture - shows still running
+-#   if {[string match -nocase "up" $updown]} {
+-#      if {$dot_count < 10} { 
+-#         incr dot_count
+-#      } else {
+-#         incr dot_count -1
+-#         set updown "down"
+-#      }
+-#   } elseif {[string match -nocase "down" $updown]} {
+-#      if {$dot_count > 0} { 
+-#         incr dot_count -1
+-#      } else {
+-#         incr dot_count
+-#         set updown "up"
+-#      }
+-#   } else {
+-#      set dot_count 1
+-#      set updown "down"
+-#   }
+-#   for {set y 0} {$y< $dot_count} {incr y} {
+-#      puts -nonewline "."
+-#   }
+-#   puts "."
+-#   # wait 1 second to check
+-#   after 1000
++   # paint pretty picture - shows still running
++   if {[string match -nocase "up" $updown]} {
++      if {$dot_count < 10} { 
++         incr dot_count
++      } else {
++         incr dot_count -1
++         set updown "down"
++      }
++   } elseif {[string match -nocase "down" $updown]} {
++      if {$dot_count > 0} { 
++         incr dot_count -1
++      } else {
++         incr dot_count
++         set updown "up"
++      }
++   } else {
++      set dot_count 1
++      set updown "down"
++   }
++   for {set y 0} {$y< $dot_count} {incr y} {
++      puts -nonewline "."
++   }
++   puts "."
++   # wait 1 second to check
++   after 1000
+ }
 diff --git a/scripts/make.tcl b/scripts/make.tcl
 index 1ab5773..f50b8b5 100755
 --- a/scripts/make.tcl
