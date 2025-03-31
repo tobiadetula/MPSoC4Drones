@@ -80,6 +80,10 @@ setup_git()
 	echo "Patching repositories for MPSoC4Drones..."
 	echo
 	
+	cd $REPOSITORY_DIR/bdf
+	git checkout $AVNET_BDF_REPO_HASH
+
+
 	cd $REPOSITORY_DIR/hdl
 	git checkout $AVNET_REPO_TAG
 	git apply --reject $PATCHES_DIR/hdl_repo24.patch
