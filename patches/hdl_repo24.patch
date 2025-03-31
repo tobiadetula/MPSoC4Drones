@@ -1,15 +1,78 @@
-From 649db5335f13c52b515a04cbaab249b53433d912 Mon Sep 17 00:00:00 2001
+From 05b362fb1a9369f4128e1b1b11e00ad900105ce1 Mon Sep 17 00:00:00 2001
 From: Oluwatobi Ed Adetula olade <olade@sdu-125892.c.sdu.dk>
-Date: Mon, 31 Mar 2025 18:06:43 +0000
-Subject: [PATCH] Added mp4d tcl scripts
+Date: Mon, 31 Mar 2025 18:38:51 +0000
+Subject: [PATCH] update tcl with mp4d
 
 ---
+ scripts/make.tcl                           |  37 ++++
  scripts/make_u96v2_sbc_mp4d.tcl            |  60 ++++++
  scripts/project_scripts/u96v2_sbc_mp4d.tcl | 212 +++++++++++++++++++++
- 2 files changed, 272 insertions(+)
+ 3 files changed, 309 insertions(+)
  create mode 100644 scripts/make_u96v2_sbc_mp4d.tcl
  create mode 100644 scripts/project_scripts/u96v2_sbc_mp4d.tcl
 
+diff --git a/scripts/make.tcl b/scripts/make.tcl
+index 1ab5773..f50b8b5 100755
+--- a/scripts/make.tcl
++++ b/scripts/make.tcl
+@@ -153,6 +153,8 @@ for {set i 0} {$i < [llength $argv]} {incr i} {
+    # check for BOARD parameter
+    if {[string match -nocase "*help*" [lindex $argv $i]]} {
+       puts "Parameters are:"
++      puts "task=\n 'create' will create project\n'build' will build hardware"
++      puts "jobs=<n_jobs>\n number of jobs to run, will use n_cores if not specified"
+       puts "board=<board_name>\n boards are listed in the /boards folder"
+       puts "project=<project_name>\n project names are listed in the /scripts/project_scripts folder"
+       puts "sdk=\n 'yes' will attempt to execute:\n ../../../software/<project_name>_sdk.tcl"
+@@ -176,6 +178,30 @@ for {set i 0} {$i < [llength $argv]} {incr i} {
+       append build_params "| Setting          |     Configuration                  |\n"
+       append build_params "+------------------+------------------------------------+\n"
+    }
++   # check for TASK parameter
++   if {[string match -nocase "task=*" [lindex $argv $i]]} {
++      set task [string range [lindex $argv $i] 5 end]
++      set printmessage $task
++	  if {$task!="create" && $task!="build"} {
++		  puts "Wrong value for parameter 'task'!"
++		  return -code ok
++	  }
++
++      for {set j 0} {$j < [expr $chart_wdith - [string length $task]]} {incr j} {
++         append printmessage " "
++      }
++      append build_params "| Task             |     $printmessage |\n"
++   }
++   # check for JOBS parameter
++   if {[string match -nocase "jobs=*" [lindex $argv $i]]} {
++      set jobs [string range [lindex $argv $i] 5 end]
++	  scan $jobs %d jobs
++      set printmessage $jobs
++      for {set j 0} {$j < [expr $chart_wdith - [string length $jobs]]} {incr j} {
++         append printmessage " "
++      }
++      append build_params "| Jobs             |     $printmessage |\n"
++   }
+    # check for BOARD parameter
+    if {[string match -nocase "board=*" [lindex $argv $i]]} {
+       set board [string range [lindex $argv $i] 6 end]
+@@ -272,6 +298,17 @@ puts $build_params
+ unset printmessage
+ unset ranonce
+ 
++if {![info exists task]} {
++  puts "Must specify value for parameter 'task'!"
++  return -code ok
++}
++
++if {[info exists jobs]} {
++	if {$jobs < $numberOfCores} {
++		set numberOfCores $jobs
++	}
++}
++
+ #version check
+ set version [version -short]
+ if {[string match -nocase "yes" $version_override]} {
 diff --git a/scripts/make_u96v2_sbc_mp4d.tcl b/scripts/make_u96v2_sbc_mp4d.tcl
 new file mode 100644
 index 0000000..6274667
