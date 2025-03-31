@@ -163,7 +163,7 @@ setup_vivado()
 
 	rm -f .vivado_built .petalinux_configured
 
-	echo Vivado project created at $REPOSITORY_DIR/hdl/projects/u962v2_sbc_mp4d_2020_2/
+	echo Vivado project created at $REPOSITORY_DIR/hdl/projects/u962v2_sbc_mp4d_2024_1/
 	echo
 }
 
@@ -176,7 +176,7 @@ setup_petalinux ()
 		exit 1
 	fi
 
-	echo Setting up PetaLinux project in $REPOSITORY_DIR/petalinux/projects/u96v2_sbc_mp4d_2020_2/ ...
+	echo Setting up PetaLinux project in $REPOSITORY_DIR/petalinux/projects/u96v2_sbc_mp4d_2024_1/ ...
 	echo
 
 	if [ ! -z $(ls $PETALINUX_DIR/projects/) ] 
