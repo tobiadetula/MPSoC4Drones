@@ -233,7 +233,7 @@ build_petalinux ()
 	mkdir -p $KERNEL_DEVSRC_DIR
 
 	petalinux-build -c kernel-devsrc -p $PETALINUX_PROJECT_DIR
-	cp -f $PETALINUX_PROJECT_DIR/build/tmp/deploy/rpm/$BOARD/kernel-devsrc-1.0-r0.*.rpm \
+	cp -f $PETALINUX_PROJECT_DIR/build/tmp/deploy/rpm/u96v2_sbc_base_xczu3eg/kernel-devsrc-1.0-r0.*.rpm \
 		$KERNEL_DEVSRC_DIR
 
 	# Build again
