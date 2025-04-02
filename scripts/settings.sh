@@ -40,8 +40,8 @@ KERNEL_DEVSRC_DIR=$TARGET_DIR/kernel_devsrc
 
 BOARD=u96v2_sbc
 PROJECT=mp4d
-TOOLS_VERSION=2020
-TOOLS_SUB_VERSION=2
+TOOLS_VERSION=2024
+TOOLS_SUB_VERSION=1
 
 AVNET_PROJECT_NAME=${BOARD}_${PROJECT}_${TOOLS_VERSION}_${TOOLS_SUB_VERSION}
 
@@ -54,13 +54,19 @@ AVNET_PETALINUX_REPO=https://github.com/Avnet/petalinux.git
 AVNET_META_AVNET_REPO=https://github.com/Avnet/meta-avnet.git
 PYNQ_REPO=https://github.com/Xilinx/PYNQ.git
 
-AVNET_REPO_TAG=2020p2_u96v2_sbc_base_20210426_105325 
+# AVNET_REPO_TAG=2020p2_u96v2_sbc_base_20210426_105325 
+AVNET_REPO_TAG=2024.1
+AVNET_BDF_REPO_HASH=fac1b1136c8ca9869265628e44e7820b90e22205
 DIII_REPO_TAG=2020p2_u96v2_sbc_mp4d_20211202_104300
-PYNQ_TAG=image_v2.7
+# PYNQ_TAG=image_v2.7
+PYNQ_TAG=image_v3.1
 
-LINUX_VERSION=5.4.0-xilinx-v2020.2
+# LINUX_VERSION=5.4.0-xilinx-v2020.2
+LINUX_VERSION=6.6.10-xilinx-v2024.1
 
-UBUNTU_20_4_BASE_ROOTFS_URL=http://cdimage.ubuntu.com/ubuntu-base/releases/20.04/release/ubuntu-base-20.04.1-base-arm64.tar.gz
+
+# UBUNTU_20_4_BASE_ROOTFS_URL=http://cdimage.ubuntu.com/ubuntu-base/releases/20.04/release/ubuntu-base-20.04.1-base-arm64.tar.gz
+UBUNTU_20_4_BASE_ROOTFS_URL=https://cdimage.ubuntu.com/ubuntu-base/releases/22.04.5/release/ubuntu-base-22.04.5-base-arm64.tar.gz
 QEMU_STAGE_1_SCRIPT=qemu_stage_1.sh
 UBUNTU_STAGE_1_PACKAGES_FILE=stage_1_packages.txt
 QEMU_STAGE_2_SCRIPT=qemu_stage_2.sh

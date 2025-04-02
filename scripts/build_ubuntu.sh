@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This script build the Ubuntu 20.04 rootfs
+# This script build the Ubuntu 22.04.05 rootfs
 
 #set -x
 
