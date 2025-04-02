@@ -1,27 +1,18 @@
-From 9af8244f802e54967508d6e12488e28b3fc63114 Mon Sep 17 00:00:00 2001
+From a5f72cd609cd6531823e1ae6cf8a882aee9efa9e Mon Sep 17 00:00:00 2001
 From: Oluwatobi Ed Adetula olade <olade@sdu-125892.c.sdu.dk>
-Date: Wed, 2 Apr 2025 06:32:46 +0000
-Subject: [PATCH] update petalinux build script with mp4d changes
+Date: Wed, 2 Apr 2025 06:47:30 +0000
+Subject: [PATCH] updated petalinux shell script for mp4d
 
 ---
- scripts/common.sh              | 123 ++++++++++++++++++------
+ scripts/common.sh              | 121 ++++++++++++++++++------
  scripts/make_u96v2_sbc_mp4d.sh | 165 +++++++++++++++++++++++++++++++++
- 2 files changed, 260 insertions(+), 28 deletions(-)
+ 2 files changed, 259 insertions(+), 27 deletions(-)
  create mode 100755 scripts/make_u96v2_sbc_mp4d.sh
 
 diff --git a/scripts/common.sh b/scripts/common.sh
-index 883da90..1b1917d 100755
+index 883da90..3921ce5 100755
 --- a/scripts/common.sh
 +++ b/scripts/common.sh
-@@ -59,7 +59,7 @@ META_AVNET_URL="https://github.com/Avnet/meta-avnet.git"
- META_AVNET_BRANCH="2024.1"
- 
- PAUSE_DELAY=5
--BUILD_FROM_TAG="false"
-+BUILD_FROM_TAG="true"
- TOOL_VER=$(echo $PETALINUX_VER | sed 's/\./p/g')
- TAG_STAMP=$(cat ${PETALINUX_SCRIPTS_FOLDER}/tag_stamp.txt)
- TAG_STRING=${TOOL_VER}_${HDL_BOARD_NAME}_${HDL_PROJECT_NAME}_${TAG_STAMP}
 @@ -130,16 +130,16 @@ reset_git_branch()
    fi
  }
