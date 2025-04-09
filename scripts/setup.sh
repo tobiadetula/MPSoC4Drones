@@ -89,14 +89,15 @@ setup_git()
 	git apply --reject $PATCHES_DIR/hdl_repo24.patch
 	git add -A && git commit -m "MPSoC4Drones"
 	git tag -f $DIII_REPO_TAG HEAD
-	git checkout $AVNET_REPO_TAG && git checkout $DIII_REPO_TAG
+	git checkout $AVNET_REPO_TAG 
 
 	cd $REPOSITORY_DIR/petalinux
 	git checkout $AVNET_REPO_TAG
 	git apply --reject $PATCHES_DIR/petalinux_repo24.patch
+
 	git add -A && git commit -m "MPSoC4Drones"
 	git tag -f $DIII_REPO_TAG HEAD
-	git checkout $AVNET_REPO_TAG && git checkout $DIII_REPO_TAG
+	git checkout $AVNET_REPO_TAG 
 
 	cd $REPOSITORY_DIR/meta-avnet
 	git checkout $AVNET_REPO_TAG
