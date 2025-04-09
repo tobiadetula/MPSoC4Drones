@@ -206,7 +206,7 @@ build_petalinux ()
 		cp -rf $PETALINUX_PROJECT_DIR/build/tmp/work/${BOARD}-xilinx-linux/openamp-fw-mat-muld/${TOOLS_VERSION}.${TOOLS_SUB_VERSION}+gitAUTOINC+b173d24682-r0/build/openamp-fw-mat-muld $PETALINUX_DIR/projects/${AVNET_PROJECT_NAME}/build/tmp/work/${BOARD}-xilinx-linux/openamp-fw-mat-muld/${TOOLS_VERSION}.${TOOLS_SUB_VERSION}+gitAUTOINC+b173d24682-r0/build/openamp-fw-mat-muld.new
 
 		cp -rf $PETALINUX_PROJECT_DIR/build/tmp/work/${BOARD}-xilinx-linux/openamp-fw-rpc-demo/${TOOLS_VERSION}.${TOOLS_SUB_VERSION}+gitAUTOINC+b173d24682-r0/build/openamp-fw-rpc-demo $PETALINUX_DIR/projects/${AVNET_PROJECT_NAME}/build/tmp/work/${BOARD}-xilinx-linux/openamp-fw-rpc-demo/${TOOLS_VERSION}.${TOOLS_SUB_VERSION}+gitAUTOINC+b173d24682-r0/build/openamp-fw-rpc-demo.new
-	fi
+	fi 
 
 	# Increase user watch (bug workaround)
 	sudo sysctl -n -w fs.inotify.max_user_watches=524288
