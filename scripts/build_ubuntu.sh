@@ -28,12 +28,19 @@ function unmount_qemu() {
 function mount_qemu() {
 	sudo cp -av /usr/bin/qemu-aarch64-static $UBUNTU_ROOTFS_DIR/usr/bin/
 	# sudo cp -av /run/systemd/resolve/stub-resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
+    
+    # Handle dangling symlink for resolv.conf
+    if [ -L $UBUNTU_ROOTFS_DIR/etc/resolv.conf ]; then
+        sudo rm $UBUNTU_ROOTFS_DIR/etc/resolv.conf
+    fi
+
     if [ -f /run/systemd/resolve/stub-resolv.conf ]; then
         sudo cp -av /run/systemd/resolve/stub-resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
     else
         echo "Warning: /run/systemd/resolve/stub-resolv.conf not found. Using /etc/resolv.conf as fallback."
         sudo cp -av /etc/resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
     fi
+
 	sudo mount --bind /dev/ $UBUNTU_ROOTFS_DIR/dev
 	sudo mount --bind /proc/ $UBUNTU_ROOTFS_DIR/proc
 	sudo mount --bind /sys/ $UBUNTU_ROOTFS_DIR/sys
