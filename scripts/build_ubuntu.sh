@@ -138,11 +138,11 @@ sudo cp -r --no-preserve=ownership $MODULES_DIR/tmp/lib/modules/6.6.10-xilinx-v2
 # Extract kernel headers and run depmod
 mount_qemu
 rpm2cpio $KERNEL_DEVSRC_DIR/*.rpm | sudo chroot $TARGET_DIR/rootfs cpio -id
-sudo cp -r $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/* \
+sudo cp -r $UBUNTU_ROOTFS_DIR/lib/modules/6.6.10-xilinx-v2024.1-g9d3875d68749/* \
 	$UBUNTU_ROOTFS_DIR/usr/lib/modules/$LINUX_VERSION/ 
 sudo rm -rf $UBUNTU_ROOTFS_DIR/lib
 sudo ln -s usr/lib $UBUNTU_ROOTFS_DIR/lib
-sudo chroot $UBUNTU_ROOTFS_DIR depmod -a $LINUX_VERSION
+sudo chroot $UBUNTU_ROOTFS_DIR depmod -a 6.6.10-xilinx-v2024.1-g9d3875d68749
 unmount_qemu
 
 # Import firmware
