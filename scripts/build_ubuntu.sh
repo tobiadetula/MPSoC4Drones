@@ -4,8 +4,15 @@
 
 #set -x
 
+
+
 [[ $0 != $BASH_SOURCE ]] && SCRIPTS_DIR=$(realpath $PWD/$BASH_SOURCE | xargs dirname) || SCRIPTS_DIR=$(realpath $0 | xargs dirname)
 source $SCRIPTS_DIR/settings.sh >> /dev/null
+
+
+# Redefine BOARD and LINUX_VERSION
+BOARD="u96v2_sbc_base_xczu3eg"
+LINUX_VERSION="6.6.10-xilinx-v2024.1-g9d3875d68749"
 
 ##########################################################
 # Ctrl+c trap:
@@ -116,8 +123,8 @@ else
 	
 	sudo mkdir -p $UBUNTU_ROOTFS_DIR/usr/lib/modules
 
-	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/zocl/usr/include/zocl $UBUNTU_ROOTFS_DIR/usr/include/
-	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/zocl/lib/modules/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/
+	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/$BOARD/zocl/usr/include/zocl $UBUNTU_ROOTFS_DIR/usr/include/
+	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/$BOARD/zocl/lib/modules/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/
 
 	sudo mkdir -p $UBUNTU_ROOTFS_DIR/lib/modules
 
@@ -131,18 +138,18 @@ rm -rf $MODULES_DIR/tmp
 mkdir $MODULES_DIR/tmp
 tar -xf $MODULES_DIR/modules--*.tgz -C $MODULES_DIR/tmp
 sudo mkdir -p $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
-sudo cp -r --no-preserve=ownership $MODULES_DIR/tmp/lib/modules/6.6.10-xilinx-v2024.1-g9d3875d68749/* $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
+sudo cp -r --no-preserve=ownership $MODULES_DIR/tmp/lib/modules/$LINUX_VERSION/* $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
 # Directory for wilc does not exist in the kernel source
 # sudo cp -f $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/wilc/lib/modules/6.6.10-xilinx-v2024.1-g9d3875d68749/extra/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/$LINUX_VERSION/extra/
 
 # Extract kernel headers and run depmod
 mount_qemu
 rpm2cpio $KERNEL_DEVSRC_DIR/*.rpm | sudo chroot $TARGET_DIR/rootfs cpio -id
-sudo cp -r $UBUNTU_ROOTFS_DIR/lib/modules/6.6.10-xilinx-v2024.1-g9d3875d68749/* \
+sudo cp -r $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/* \
 	$UBUNTU_ROOTFS_DIR/usr/lib/modules/$LINUX_VERSION/ 
 sudo rm -rf $UBUNTU_ROOTFS_DIR/lib
 sudo ln -s usr/lib $UBUNTU_ROOTFS_DIR/lib
-sudo chroot $UBUNTU_ROOTFS_DIR depmod -a 6.6.10-xilinx-v2024.1-g9d3875d68749
+sudo chroot $UBUNTU_ROOTFS_DIR depmod -a $LINUX_VERSION
 unmount_qemu
 
 # Import firmware
