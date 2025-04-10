@@ -28,7 +28,7 @@ function unmount_qemu() {
 function mount_qemu() {
 	sudo cp -av /usr/bin/qemu-aarch64-static $UBUNTU_ROOTFS_DIR/usr/bin/
 	# sudo cp -av /run/systemd/resolve/stub-resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
-    
+
     # Handle dangling symlink for resolv.conf
     if [ -L $UBUNTU_ROOTFS_DIR/etc/resolv.conf ]; then
         sudo rm $UBUNTU_ROOTFS_DIR/etc/resolv.conf
@@ -64,7 +64,7 @@ if [ $UPDATE_KERNEL = "false" ]; then
 	cd $UBUNTU_ROOTFS_DIR
 
 	# Get base rootfs
-	echo Fetching Ubuntu 20.04 base rootfs...
+	echo Fetching Ubuntu 22.04 base rootfs...
 	echo
 
 	wget $UBUNTU_20_4_BASE_ROOTFS_URL -O - | tar xpz -C $UBUNTU_ROOTFS_DIR
