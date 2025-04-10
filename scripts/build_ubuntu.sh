@@ -116,8 +116,8 @@ else
 	
 	sudo mkdir -p $UBUNTU_ROOTFS_DIR/usr/lib/modules
 
-	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/$BOARD/zocl/usr/include/zocl $UBUNTU_ROOTFS_DIR/usr/include/
-	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/$BOARD/zocl/lib/modules/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/
+	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/zocl/usr/include/zocl $UBUNTU_ROOTFS_DIR/usr/include/
+	sudo cp -rf $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/zocl/lib/modules/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/
 
 	sudo mkdir -p $UBUNTU_ROOTFS_DIR/lib/modules
 
@@ -131,8 +131,8 @@ rm -rf $MODULES_DIR/tmp
 mkdir $MODULES_DIR/tmp
 tar -xf $MODULES_DIR/modules--*.tgz -C $MODULES_DIR/tmp
 sudo mkdir -p $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
-sudo cp -r --no-preserve=ownership $MODULES_DIR/tmp/lib/modules/$LINUX_VERSION/* $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
-sudo cp -f $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/$BOARD/wilc/lib/modules/$LINUX_VERSION/extra/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/$LINUX_VERSION/extra/
+sudo cp -r --no-preserve=ownership $MODULES_DIR/tmp/lib/modules/6.6.10-xilinx-v2024.1-g9d3875d68749/* $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
+sudo cp -f $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/wilc/lib/modules/6.6.10-xilinx-v2024.1-g9d3875d68749/extra/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/$LINUX_VERSION/extra/
 
 # Extract kernel headers and run depmod
 mount_qemu
