@@ -4,8 +4,6 @@
 
 #set -x
 
-
-
 [[ $0 != $BASH_SOURCE ]] && SCRIPTS_DIR=$(realpath $PWD/$BASH_SOURCE | xargs dirname) || SCRIPTS_DIR=$(realpath $0 | xargs dirname)
 source $SCRIPTS_DIR/settings.sh >> /dev/null
 
@@ -46,6 +44,22 @@ function mount_qemu() {
 	sudo mount --bind /sys/ $UBUNTU_ROOTFS_DIR/sys
 }
 
+function copy_tools_to_chroot() {
+    # Copy cpio
+    sudo cp -v $(which cpio) $UBUNTU_ROOTFS_DIR/usr/bin/
+    # Copy depmod
+    sudo cp -v $(which depmod) $UBUNTU_ROOTFS_DIR/usr/bin/
+
+    # Copy dependencies for cpio
+    for lib in $(ldd $(which cpio) | awk '{print $3}' | grep -v '^$'); do
+        sudo cp -v $lib $UBUNTU_ROOTFS_DIR/lib/ || sudo cp -v $lib $UBUNTU_ROOTFS_DIR/lib64/
+    done
+
+    # Copy dependencies for depmod
+    for lib in $(ldd $(which depmod) | awk '{print $3}' | grep -v '^$'); do
+        sudo cp -v $lib $UBUNTU_ROOTFS_DIR/lib/ || sudo cp -v $lib $UBUNTU_ROOTFS_DIR/lib64/
+    done
+}
 ##########################################################
 # Main:
 
@@ -102,6 +116,7 @@ if [ $UPDATE_KERNEL = "false" ]; then
 	echo
 
 	mount_qemu
+    copy_tools_to_chroot
 	sudo chroot $UBUNTU_ROOTFS_DIR/ /mp4d_settings/$QEMU_STAGE_1_SCRIPT
 	unmount_qemu
 
@@ -117,6 +132,7 @@ if [ $UPDATE_KERNEL = "false" ]; then
 
 	# Workaround for installing XRT dependencies
 	mount_qemu
+    copy_tools_to_chroot
 	sudo chroot $UBUNTU_ROOTFS_DIR/ /mp4d_settings/$QEMU_STAGE_2_SCRIPT
 	unmount_qemu
 
