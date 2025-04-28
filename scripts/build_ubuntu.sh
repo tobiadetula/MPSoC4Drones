@@ -10,40 +10,39 @@ source $SCRIPTS_DIR/settings.sh >> /dev/null
 
 # Redefine BOARD and LINUX_VERSION
 BOARD="u96v2_sbc_base_xczu3eg"
-LINUX_VERSION="6.6.10-xilinx-v2024.1-g9d3875d68749"
+LINUX_VERSION="6.6.10-xilinx-v2024.1-g2a9895f4630b"
 
 ##########################################################
 # Ctrl+c trap:
 trap unmount_qemu INT
 
 function unmount_qemu() {
-	sudo umount -fl $UBUNTU_ROOTFS_DIR/dev 2> /dev/null
-	sudo umount -fl $UBUNTU_ROOTFS_DIR/proc 2> /dev/null
-	sudo umount -fl $UBUNTU_ROOTFS_DIR/sys 2> /dev/null
-	sudo umount -fl ${UBUNTU_ROOTFS_DIR}$XILINX_TOOLS_DIR 2> /dev/null
+    sudo umount -fl $UBUNTU_ROOTFS_DIR/dev/pts 2> /dev/null
+    sudo umount -fl $UBUNTU_ROOTFS_DIR/dev 2> /dev/null
+    sudo umount -fl $UBUNTU_ROOTFS_DIR/proc 2> /dev/null
+    sudo umount -fl $UBUNTU_ROOTFS_DIR/sys 2> /dev/null
+    sudo umount -fl ${UBUNTU_ROOTFS_DIR}$XILINX_TOOLS_DIR 2> /dev/null
 }
 
 function mount_qemu() {
-	sudo cp -av /usr/bin/qemu-aarch64-static $UBUNTU_ROOTFS_DIR/usr/bin/
-    sudo cp -av /etc/resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
+    sudo cp -av /usr/bin/qemu-aarch64-static $UBUNTU_ROOTFS_DIR/usr/bin/
 
-	# sudo cp -av /run/systemd/resolve/stub-resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
+    # Handle resolv.conf symlink
+    if [ -L $UBUNTU_ROOTFS_DIR/etc/resolv.conf ]; then
+        sudo rm $UBUNTU_ROOTFS_DIR/etc/resolv.conf
+    fi
 
-    # Handle dangling symlink for resolv.conf
-    # if [ -L $UBUNTU_ROOTFS_DIR/etc/resolv.conf ]; then
-    #     sudo rm $UBUNTU_ROOTFS_DIR/etc/resolv.conf
-    # fi
+    if [ -f /run/systemd/resolve/stub-resolv.conf ]; then
+        sudo cp -av /run/systemd/resolve/stub-resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
+    else
+        echo "Warning: /run/systemd/resolve/stub-resolv.conf not found. Using /etc/resolv.conf as fallback."
+        sudo cp -av /etc/resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
+    fi
 
-    # if [ -f /run/systemd/resolve/stub-resolv.conf ]; then
-    #     sudo cp -av /run/systemd/resolve/stub-resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
-    # else
-    #     echo "Warning: /run/systemd/resolve/stub-resolv.conf not found. Using /etc/resolv.conf as fallback."
-    #     sudo cp -av /etc/resolv.conf $UBUNTU_ROOTFS_DIR/etc/resolv.conf
-    # fi
-
-	sudo mount --bind /dev/ $UBUNTU_ROOTFS_DIR/dev
-	sudo mount --bind /proc/ $UBUNTU_ROOTFS_DIR/proc
-	sudo mount --bind /sys/ $UBUNTU_ROOTFS_DIR/sys
+    sudo mount --bind /dev/ $UBUNTU_ROOTFS_DIR/dev
+    sudo mount --bind /dev/pts $UBUNTU_ROOTFS_DIR/dev/pts  # Mount dev/pts for pseudoterminals
+    sudo mount --bind /proc/ $UBUNTU_ROOTFS_DIR/proc
+    sudo mount --bind /sys/ $UBUNTU_ROOTFS_DIR/sys
 }
 
 function copy_tools_to_chroot() {
@@ -118,7 +117,6 @@ if [ $UPDATE_KERNEL = "false" ]; then
 	echo
 
 	mount_qemu
-    copy_tools_to_chroot
 	sudo chroot $UBUNTU_ROOTFS_DIR/ /mp4d_settings/$QEMU_STAGE_1_SCRIPT
 	unmount_qemu
 
@@ -134,7 +132,6 @@ if [ $UPDATE_KERNEL = "false" ]; then
 
 	# Workaround for installing XRT dependencies
 	mount_qemu
-    copy_tools_to_chroot
 	sudo chroot $UBUNTU_ROOTFS_DIR/ /mp4d_settings/$QEMU_STAGE_2_SCRIPT
 	unmount_qemu
 
@@ -170,7 +167,7 @@ tar -xf $MODULES_DIR/modules--*.tgz -C $MODULES_DIR/tmp
 sudo mkdir -p $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
 sudo cp -r --no-preserve=ownership $MODULES_DIR/tmp/lib/modules/$LINUX_VERSION/* $UBUNTU_ROOTFS_DIR/lib/modules/$LINUX_VERSION/
 # Directory for wilc does not exist in the kernel source
-# sudo cp -f $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/wilc/lib/modules/6.6.10-xilinx-v2024.1-g9d3875d68749/extra/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/$LINUX_VERSION/extra/
+sudo cp -f $PETALINUX_PROJECT_DIR/build/tmp/sysroots-components/u96v2_sbc_base_xczu3eg/wilc/lib/modules/$LINUX_VERSION/updates/* $UBUNTU_ROOTFS_DIR/usr/lib/modules/$LINUX_VERSION/*
 
 # Extract kernel headers and run depmod
 mount_qemu
